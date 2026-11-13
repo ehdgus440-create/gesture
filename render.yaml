@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: gesture
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    branch: main
+    autoDeployTrigger: commit
+    healthCheckPath: /healthz

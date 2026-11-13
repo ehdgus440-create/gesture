@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1d1238">
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/icon.svg">
+<link rel="apple-touch-icon" href="/icon.svg">
+<title>몸으로 말해요</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#241b3a;--muted:#7a7290;--pri:#ff4d8d;--pri2:#ff7a59;--ok:#22a565;--liar:#7b3cff;--line:#ece7f6}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:-apple-system,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",system-ui,sans-serif;background:#1d1238 radial-gradient(circle at 20% 0%,#46288a 0,#1d1238 65%) fixed;color:var(--ink);min-height:100vh;-webkit-tap-highlight-color:transparent}
+#app{max-width:520px;margin:0 auto;padding:14px 14px 70px}
+h1,h2,h3,.big,.word,.logo,.banner,.codebox b{font-family:"Jua",sans-serif;font-weight:400}
+h2{margin:0 0 8px;font-size:24px} h3{margin:0 0 10px;font-size:19px}
+.hero{text-align:center;color:#fff;padding:16px 0 4px}
+.hero h1{font-size:42px;margin:2px 0}
+.hero p{opacity:.8;margin:0}
+.logo{font-size:58px;animation:bob 2.4s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-6px) rotate(-6deg)}}
+.card{background:#fff;border-radius:18px;padding:16px;margin:12px 0;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+label{display:block;font-weight:700;font-size:14px;margin:12px 0 6px;color:var(--muted)}
+label:first-child{margin-top:0}
+input,select{width:100%;font-size:17px;padding:12px;border:2px solid var(--line);border-radius:12px;outline:none;background:#faf8ff;color:var(--ink);font-family:inherit}
+input:focus,select:focus{border-color:var(--pri)}
+button{font:inherit;font-size:16px;border:0;border-radius:12px;padding:12px 16px;cursor:pointer;font-weight:700;color:var(--ink)}
+button:disabled{opacity:.4;cursor:default}
+.primary{background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff;width:100%;margin-top:12px;font-size:18px;padding:15px;box-shadow:0 4px 0 #c22c63}
+.primary:active:not(:disabled){transform:translateY(2px);box-shadow:0 2px 0 #c22c63}
+.ghost{background:#f1edf9}
+.small{font-size:14px;padding:8px 12px}
+.row{display:flex;gap:8px;margin-top:8px}
+.row input{flex:1;min-width:0}
+.row button{flex:none;margin:0}
+.btns{display:flex;gap:8px}.btns>*{flex:1}
+.or{text-align:center;color:var(--muted);font-size:13px;margin:14px 0 4px}
+.notice{background:#fff6e5;border:1px solid #ffd99a;color:#7a4b00;border-radius:12px;padding:12px;font-size:14px;line-height:1.5;margin-top:10px}
+.rooms{list-style:none;padding:0;margin:8px 0 0}
+.rooms li{display:flex;justify-content:space-between;align-items:center;padding:12px;border:2px solid var(--line);border-radius:12px;margin-top:8px;cursor:pointer}
+.rooms li b{font-family:"Jua";font-size:20px;letter-spacing:2px}
+.tag{font-size:12px;padding:3px 8px;border-radius:99px;background:#e9f9f0;color:var(--ok);font-weight:700}
+.tag.busy{background:#f3effb;color:var(--muted)}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:8px;color:#fff}
+.topbar .ghost{background:rgba(255,255,255,.12);color:#fff}
+.codebox{background:rgba(255,255,255,.12);border-radius:12px;padding:6px 12px;font-size:13px;cursor:pointer;text-align:center}
+.codebox b{display:block;font-size:24px;letter-spacing:4px}
+.roundtag{font-family:"Jua";font-size:18px;min-width:56px;text-align:right}
+.plist{list-style:none;padding:0;margin:0;display:flex;flex-wrap:wrap;gap:8px}
+.plist li{background:#f4f0fc;border-radius:99px;padding:8px 12px;font-weight:700;display:flex;align-items:center;gap:6px}
+.plist li.me{background:#ffe3ee}
+.x{background:none;padding:0 2px;color:var(--muted);font-size:14px}
+.seg{display:flex;background:#f1edf9;border-radius:12px;padding:4px;gap:4px}
+.seg button{flex:1;background:none;padding:10px 6px;font-size:15px}
+.seg button.on{background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.12);color:var(--pri)}
+.desc{font-size:13px;color:var(--muted);margin:6px 2px 0;line-height:1.5}
+.rolecard{text-align:center;cursor:pointer;background:linear-gradient(160deg,#fff,#fff4f8);border:3px dashed #ffc2d8;user-select:none}
+.rolecard.hidden{background:#2b1d4f;border-color:#5c43a0;color:#fff}
+.rolecard .cat{color:var(--muted);font-weight:700}
+.rolecard .word{font-size:40px;margin:6px 0;color:var(--pri)}
+.role-liar{font-family:"Jua";font-size:30px;color:var(--liar);margin:4px 0}
+.tip{margin:6px 0 0;font-size:13px;color:var(--muted)}
+.peek{font-size:18px;padding:16px 0}
+.hidehint{font-size:11px;color:#b9b2c9;margin-top:6px}
+.hints{list-style:none;padding:0;margin:0}
+.hints li{display:flex;gap:10px;align-items:flex-start;padding:10px 4px;border-bottom:1px solid var(--line)}
+.hints li:last-child{border-bottom:0}
+.hints li.turn{background:#fff4d6;border-radius:10px}
+.hints li.gone{opacity:.4}
+.hints .nm{flex:none;width:90px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hints .hs{display:flex;flex-wrap:wrap;gap:6px}
+.chip{background:#f1edf9;border-radius:8px;padding:4px 9px;font-size:15px}
+.typing{color:#c08a00;font-size:14px;animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.4}}
+.myturn{border:3px solid var(--pri);animation:pulse 1.4s infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 6px rgba(255,77,141,.25)}}
+.wait{color:#fff;text-align:center;opacity:.9;margin:14px 0}
+.card .wait{color:var(--muted)}
+.vgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.vbtn{background:#f4f0fc;padding:14px 8px}
+.vbtn.on{background:var(--liar);color:#fff}
+.dots{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-top:8px}
+.dot{font-size:12px;padding:3px 8px;border-radius:99px;background:rgba(255,255,255,.12);color:#fff}
+.dot.on{background:var(--ok)}
+.banner{text-align:center;font-size:34px;padding:18px 10px;border-radius:18px;color:#fff;margin:12px 0;animation:pop .5s}
+.banner.citizen{background:linear-gradient(135deg,#22a565,#2bc6a0)}
+.banner.liar{background:linear-gradient(135deg,#7b3cff,#ff4d8d)}
+.banner small{display:block;font-family:inherit;font-size:15px;opacity:.95;margin-top:6px}
+@keyframes pop{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.05)}}
+.reveal{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:17px}
+.reveal span:nth-child(odd){color:var(--muted);font-weight:700}
+.reveal b{font-family:"Jua";font-size:21px;font-weight:400}
+.vlist div{padding:6px 0;border-bottom:1px solid var(--line)}
+.vlist small{color:var(--muted)}
+.score{list-style:none;padding:0;margin:0}
+.score li{display:flex;justify-content:space-between;padding:7px 2px;border-bottom:1px solid var(--line);font-weight:700}
+.score li:first-child{color:#d48a00}
+.rules{color:#fff;opacity:.9;font-size:14px;line-height:1.7}
+.rules summary{cursor:pointer;font-weight:700;opacity:1}
+.stepper{display:flex;align-items:center;justify-content:space-between;background:#f1edf9;border-radius:12px;padding:6px}
+.stepper button{background:#fff;width:52px;font-size:22px}
+.stepper b{font-family:"Jua";font-size:26px;font-weight:400}
+.pass{text-align:center}
+.pass .big{font-size:64px;color:var(--pri)}
+.tname{flex:1;font-family:"Jua",sans-serif;font-size:20px;padding:8px 10px}
+.cnt{flex:none;font-weight:700;color:var(--muted);font-size:14px}.cnt.full{color:var(--pri)}
+.tm{list-style:none;padding:0;margin:0 0 10px}
+.tm li{display:flex;align-items:center;gap:8px;padding:7px 4px;border-bottom:1px solid var(--line);font-weight:700}
+.tm li.me{color:var(--pri)}.tm li.empty{color:#b9b2c9;font-weight:400}
+.tm .pos{width:22px;text-align:center}.tm .x{margin-left:auto}
+.tstat{padding:10px 0;border-bottom:1px solid var(--line)}.tstat:last-child{border-bottom:0}
+.tsh{display:flex;justify-content:space-between;align-items:center}.tsh small{color:var(--muted);font-weight:700}
+.bar{height:10px;background:#f1edf9;border-radius:99px;margin:6px 0;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--pri),var(--pri2));transition:width .4s}
+.chain{font-size:13px;color:var(--muted);line-height:1.6}
+.chain .cur{color:#fff;background:var(--liar);border-radius:6px;padding:1px 6px}
+.tres.ok{border:3px solid #9be3bf}.tres.no{border:3px solid #ffc2d8}
+.stepper.mini{padding:4px;margin-bottom:10px}.stepper.mini button{width:44px;font-size:18px;padding:6px}.stepper.mini b{font-size:18px}
+.slots{display:flex;flex-direction:column;gap:6px}
+.slot{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:9px 10px;border-radius:12px;font-weight:700;font-size:15px}
+.slot.open{background:#fff;border:2px dashed #d9d0ee;color:var(--muted)}
+.slot.taken{background:#f4f0fc}.slot.me{background:#ffe3ee;color:var(--pri)}.slot.dup{background:#fff1d6}
+.slot .num{flex:none;width:28px;height:28px;border-radius:50%;background:var(--liar);color:#fff;display:flex;align-items:center;justify-content:center;font-family:"Jua";font-weight:400}
+.slot.open .num{background:#d9d0ee}
+.slot .who{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.slot .role{flex:none;font-size:12px;color:var(--muted);font-weight:700}
+html.offline body::before{content:'⚠️ 서버에 다시 연결하는 중…';position:fixed;top:0;left:0;right:0;z-index:10;background:#ffb020;color:#241b3a;text-align:center;font-weight:700;padding:6px;font-size:14px}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(30px);background:#241b3a;color:#fff;padding:12px 18px;border-radius:12px;font-size:15px;opacity:0;transition:.25s;pointer-events:none;max-width:90vw;text-align:center;z-index:9}
+#toast.on{opacity:1;transform:translateX(-50%)}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="toast"></div>
+<script>
+/* 서버 연결: 로그인 없이 이 서버(WebSocket)로 방 상태를 주고받아요 */
+(function(){
+  const url=(location.protocol==='https:'?'wss://':'ws://')+location.host+'/ws';
+  let ws=null,ready=false,rid=0,sid=0,tries=0;const queue=[],pend=new Map(),subs=new Map();
+  function connect(){
+    try{ws=new WebSocket(url)}catch(e){return setTimeout(connect,2000)}
+    ws.onopen=()=>{ready=true;tries=0;document.documentElement.classList.remove('offline');
+      for(const s of subs.values())ws.send(JSON.stringify(Object.assign({t:'sub',sid:s.sid},s.q)));
+      queue.splice(0).forEach(m=>{const p=pend.get(m.rid);if(p)p.sent=true;ws.send(JSON.stringify(m))})};
+    ws.onmessage=e=>{let m;try{m=JSON.parse(e.data)}catch(x){return}
+      if(m.t==='snap'){const s=subs.get(m.sid);if(s)s.deliver(m.r)}
+      else if(m.t==='snaperr'){const s=subs.get(m.sid);if(s){subs.delete(m.sid);if(s.err)s.err(m.err)}}
+      else if(m.t==='res'){const p=pend.get(m.rid);if(p){pend.delete(m.rid);m.ok?p.res(m.r):p.rej(m.err||{code:'unavailable'})}}};
+    ws.onclose=()=>{ready=false;document.documentElement.classList.add('offline');
+      for(const [id,p] of pend)if(p.sent){pend.delete(id);p.rej({code:'unavailable',message:'연결이 끊겼어요'})}
+      setTimeout(connect,Math.min(8000,800*(++tries))+Math.random()*700)};
+  }
+  function req(m){return new Promise((res,rej)=>{const id=++rid;const p={res,rej,sent:ready};pend.set(id,p);m.rid=id;
+    if(ready)ws.send(JSON.stringify(m));else queue.push(m);
+    setTimeout(()=>{if(pend.has(id)){pend.delete(id);rej({code:'unavailable',message:'응답 없음'})}},20000)})}
+  const meta={fromCache:false,hasPendingWrites:false};
+  const mkDoc=r=>({id:r.id,exists:!!r.exists,data:()=>r.exists?r.data:undefined,metadata:meta});
+  const mkQ=r=>{const docs=r.docs.map(d=>mkDoc({id:d.id,exists:true,data:d.data}));return {docs,size:docs.length,empty:!docs.length,metadata:meta,docChanges:()=>[]}};
+  const rid12=()=>Math.random().toString(36).slice(2,14);
+  function listen(q,deliver,err){const id=++sid;subs.set(id,{sid:id,q,deliver,err});if(ready)ws.send(JSON.stringify(Object.assign({t:'sub',sid:id},q)));
+    return()=>{if(subs.delete(id)&&ready)ws.send(JSON.stringify({t:'unsub',sid:id}))}}
+  function docRef(path){return {id:path.split('/').pop(),path,
+    get:()=>req({t:'get',q:{kind:'doc',path}}).then(mkDoc),
+    set:d=>req({t:'set',path,data:d}),update:d=>req({t:'update',path,data:d}),delete:()=>req({t:'delete',path}),
+    onSnapshot:(n,e)=>listen({kind:'doc',path},r=>n(mkDoc(r)),e),
+    collection:c=>query(path+'/'+c)}}
+  function query(path,f,o,l){f=f||[];const q={kind:'query',path,filters:f,order:o||null,limit:l||0};return {path,
+    where:(a,b,c)=>query(path,f.concat([[a,b,c]]),o,l),orderBy:(a,d)=>query(path,f,[a,d||'asc'],l),limit:n=>query(path,f,o,n),
+    get:()=>req({t:'get',q}).then(mkQ),onSnapshot:(n,e)=>listen(q,r=>n(mkQ(r)),e),
+    doc:id=>docRef(path+'/'+(id||rid12())),add:async d=>{const r=docRef(path+'/'+rid12());await r.set(d);return r}}}
+  const DB={doc:docRef,collection:p=>query(p)};
+  let uid=null;try{uid=localStorage.getItem('bt_uid');if(!uid){uid='p'+rid12();localStorage.setItem('bt_uid',uid)}}catch(e){uid='p'+rid12()}
+  const USER={id:async()=>uid,me:async()=>({id:uid}),can:async()=>true,isOwner:()=>false,canEdit:()=>false};
+  window.claude={use:async n=>n==='db'?DB:n==='user'?USER:null};
+  connect();
+})();
+
+</script>
+<script>
+const WORDS={
+ "음식":["김치찌개","떡볶이","삼겹살","짜장면","치킨","피자","라면","비빔밥","초밥","햄버거","순대","냉면","갈비탕","김밥","마라탕","팥빙수","돈가스","족발","곱창","붕어빵","호떡","탕후루"],
+ "동물":["기린","펭귄","코끼리","고양이","강아지","판다","캥거루","악어","문어","거북이","하마","낙타","다람쥐","부엉이","상어","돌고래","사자","원숭이","고슴도치","오리","나무늘보","카피바라"],
+ "장소":["찜질방","노래방","편의점","놀이공원","수영장","도서관","병원","공항","PC방","헬스장","결혼식장","캠핑장","동물원","미용실","군대","지하철","목욕탕","영화관","학교","해수욕장","장례식장","경찰서"],
+ "직업":["소방관","경찰","의사","요리사","유튜버","선생님","택배기사","아이돌","개그맨","변호사","미용사","파일럿","농부","마술사","기자","군인","간호사","프로게이머","바리스타","축구선수","치과의사","국회의원"],
+ "물건":["우산","칫솔","냉장고","리모컨","안경","휴대폰","베개","거울","지갑","이어폰","손톱깎이","드라이기","마스크","선풍기","계산기","자전거","숟가락","달력","휴지","신발","효자손","고무장갑"],
+ "스포츠·놀이":["축구","야구","볼링","탁구","스키","태권도","줄넘기","당구","골프","배드민턴","수영","씨름","마라톤","펜싱","윷놀이","숨바꼭질","제기차기","팔씨름","줄다리기","피구","고스톱","보드게임"],
+ "나라·도시":["일본","미국","프랑스","이집트","호주","브라질","인도","중국","영국","이탈리아","제주도","부산","하와이","스위스","베트남","태국","러시아","캐나다","멕시코","독일","울릉도","라스베이거스"],
+ "상황":["소개팅","이사","면접","첫 출근","전역","생일파티","지각","다이어트","야근","졸업식","수학여행","장보기","대청소","이별","프러포즈","시험공부","캠핑","결혼식","회식","단체사진","월급날","벌칙"]
+};
+const CATS=Object.keys(WORDS);
+const URLROOM=(()=>{try{return (new URLSearchParams(location.search).get('room')||'').toUpperCase().replace(/[^A-Z]/g,'').slice(0,4)}catch(e){return ''}})();
+const CH="ABCDEFGHJKLMNPQRSTUVWXYZ";
+const MAXP=15,TEAMMAX=10,ROOMMAX=50;
+const TEAM_DEF=[['t1','🔴 빨강팀'],['t2','🔵 파랑팀'],['t3','🟢 초록팀'],['t4','🟡 노랑팀'],['t5','🟣 보라팀']];
+const $app=document.getElementById('app');
+const S={db:null,me:null,dbState:'loading',noWrite:false,view:'home',code:null,room:null,players:[],playersLoaded:false,rooms:[],hideCard:false,busy:false,local:null};
+let unsubRoom=null,unsubPlayers=null;
+
+/* ---------- utils ---------- */
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const safe=s=>String(s).replace(/[^A-Za-z0-9_\-.~:@+]/g,'_').slice(0,120);
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a};
+const norm=s=>String(s||'').replace(/[\s·.,!?~]/g,'').toLowerCase();
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+function lsGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
+function lsSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+function lsDel(k){try{localStorage.removeItem(k)}catch(e){}}
+function localId(){let id=lsGet('liar_uid');if(!id){id='d'+Math.random().toString(36).slice(2,12);lsSet('liar_uid',id)}return id}
+let toastT;function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('on'),2400)}
+function ago(ms){const m=Math.floor((Date.now()-ms)/60000);return m<1?'방금':m<60?m+'분 전':Math.floor(m/60)+'시간 전'}
+
+async function w(fn){
+  if(S.busy)return;S.busy=true;
+  try{await fn()}
+  catch(e){
+    if(e&&e.code==='invalid_argument'){S.noWrite=true;render()}
+    else if(e&&e.code==='unavailable'){await sleep(400+Math.random()*600);try{await fn()}catch(e2){toast('저장에 실패했어요. 다시 눌러주세요')}}
+    else if(e&&e.code==='quota_exceeded'){toast('저장 공간이 가득 찼어요')}
+    else toast('문제가 생겼어요: '+((e&&e.message)||e));
+  }finally{S.busy=false}
+}
+
+/* ---------- room helpers ---------- */
+const R=()=>S.room;
+const P=id=>S.players.find(p=>p.id===id);
+const nm=id=>{const p=P(id);return p?p.name:'(나간 사람)'};
+const isHost=()=>!!S.room&&S.room.hostId===S.me;
+const hintsOf=id=>{const p=P(id);return p&&p.round===S.room.round&&Array.isArray(p.hints)?p.hints:[]};
+const voteOf=id=>{const p=P(id);return p&&p.voteRound===S.room.round?p.vote:''};
+const inGame=()=>!!(S.room&&S.room.order&&S.room.order.includes(S.me));
+const liveOrder=()=>(S.room.order||[]).filter(id=>P(id));
+const roomRef=()=>S.db.doc('rooms/'+S.code);
+const pRef=id=>roomRef().collection('players').doc(id);
+const teamsOf=()=>{const r=R();const n=Math.min(5,Math.max(2,r.teamCount||2));return TEAM_DEF.slice(0,n).map(([id,d])=>({id,name:((r.teamNames||{})[id])||d}))};
+const sizeOf=tid=>Math.min(TEAMMAX,Math.max(1,((R().teamSizes||{})[tid])||4));
+const membersOf=tid=>{const sz=sizeOf(tid);return S.players.filter(p=>p.team===tid&&p.slot>=1&&p.slot<=sz).sort((a,b)=>a.slot-b.slot||(a.teamAt||0)-(b.teamAt||0))};
+const slotRole=(n,sz)=>sz===1?'👁🎯 제시어+정답':n===1?'👁 제시어 보기':n===sz?'🎯 정답 쓰기':'🗣 전달';
+function relayCheck(){
+  const ts=teamsOf().map(t=>({...t,sz:sizeOf(t.id),m:membersOf(t.id)})).filter(t=>t.m.length);
+  if(!ts.length)return {err:'자리에 앉은 사람이 없어요'};
+  for(const t of ts)for(let n=1;n<=t.sz;n++){const o=t.m.filter(p=>p.slot===n);
+    if(!o.length)return {err:t.name+' '+n+'번 자리가 비었어요'};
+    if(o.length>1)return {err:t.name+' '+n+'번 자리에 '+o.length+'명이 있어요'}}
+  return {ts};
+}
+function relayInfo(play){
+  const r=R();const ord=(play.order||[]).filter(id=>P(id));const last=ord[ord.length-1];let cur=null;
+  for(const id of ord){if(id===last){cur=last;break}if(P(id).passRound!==r.round){cur=id;break}}
+  const passed=ord.filter(id=>id!==last&&P(id).passRound===r.round).length;
+  const lp=P(last);const ansd=!!(lp&&lp.ansRound===r.round&&lp.ans);
+  return {ord,last,cur,passed,ansd};
+}
+
+/* ---------- init ---------- */
+(async()=>{
+  const t=setTimeout(()=>{if(S.dbState==='loading'){S.dbState='none';render()}},10000);
+  let db=null,user=null;
+  try{if(window.claude&&claude.use){[db,user]=await Promise.all([claude.use('db'),claude.use('user')])}}catch(e){}
+  clearTimeout(t);
+  if(!db){S.dbState='none';render();return}
+  S.db=db;
+  let id=null;try{id=user?await user.id():null}catch(e){}
+  S.me=safe(id||localId());
+  try{const c=user?await user.can('data.write'):null;if(c===false)S.noWrite=true}catch(e){}
+  S.dbState='ok';render();
+  const since=Date.now()-6*3600e3;
+  db.collection('rooms').where('createdAt','>',since).orderBy('createdAt','desc').limit(20)
+    .onSnapshot(s=>{S.rooms=s.docs.map(d=>({id:d.id,...d.data()}));if(S.view==='home')render()},()=>{});
+  const saved=lsGet('liar_room');if(saved)enterRoom(saved,null,true);
+})();
+render();
+
+/* ---------- actions ---------- */
+async function createRoom(name){
+  let code;
+  for(let i=0;i<8;i++){code=Array.from({length:4},()=>pick(CH)).join('');const s=await S.db.doc('rooms/'+code).get();if(!s.exists)break}
+  await S.db.doc('rooms/'+code).set({code,hostId:S.me,hostName:name,status:'lobby',game:'team',round:0,catChoice:'랜덤',teamCount:2,teamNames:{},teamScores:{},used:[],createdAt:Date.now()});
+  await enterRoom(code,name);
+}
+async function enterRoom(code,name,silent){
+  code=String(code||'').toUpperCase().trim();
+  if(code.length!==4){toast('방 코드 4자리를 입력해주세요');return}
+  const ref=S.db.doc('rooms/'+code);
+  const snap=await ref.get();
+  if(!snap.exists){if(!silent)toast('방을 찾을 수 없어요');lsDel('liar_room');return}
+  name=name||lsGet('liar_name');
+  const pr=ref.collection('players').doc(S.me);
+  const ps=await pr.get();
+  if(!ps.exists){
+    if(!name){if(!silent)toast('닉네임을 먼저 입력해주세요');return}
+    const all=await ref.collection('players').get();
+    if(all.size>=ROOMMAX){toast('방이 가득 찼어요 (최대 '+ROOMMAX+'명)');return}
+    await pr.set({name,joinedAt:Date.now(),round:-1,hints:[],vote:'',voteRound:-1});
+  }else if(name&&ps.data().name!==name){await pr.update({name})}
+  stopRoom();
+  S.code=code;S.view='room';S.room=null;S.players=[];S.playersLoaded=false;S.hideCard=false;lsSet('liar_room',code);
+  unsubRoom=ref.onSnapshot(s=>{if(!s.exists){goHome();toast('방이 닫혔어요');return}S.room=s.data();render()},()=>{});
+  unsubPlayers=ref.collection('players').orderBy('joinedAt').onSnapshot(s=>{S.players=s.docs.map(d=>({id:d.id,...d.data()}));if(!s.metadata.fromCache)S.playersLoaded=true;render()},()=>{});
+  render();
+}
+function stopRoom(){if(unsubRoom)unsubRoom();if(unsubPlayers)unsubPlayers();unsubRoom=unsubPlayers=null}
+function goHome(){stopRoom();S.view='home';S.code=null;S.room=null;S.players=[];lsDel('liar_room');render()}
+async function leaveRoom(){
+  const r=R();const others=S.players.filter(p=>p.id!==S.me);
+  await pRef(S.me).delete();
+  if(r&&r.hostId===S.me){if(others.length)await roomRef().update({hostId:others[0].id,hostName:others[0].name});else await roomRef().delete()}
+  goHome();
+}
+/* ---------- team relay ---------- */
+async function startRelay(){
+  const r=R();
+  const chk=relayCheck();if(chk.err){toast(chk.err);return}
+  const ts=chk.ts.map(t=>({...t,m:t.m.map(p=>p.id)}));
+  const used=Array.isArray(r.used)?r.used:[];const taken=[];
+  const plays=ts.map(t=>{
+    const cat=WORDS[r.catChoice]?r.catChoice:pick(CATS);
+    let pool=WORDS[cat].filter(x=>!used.includes(x)&&!taken.includes(x));
+    if(!pool.length)pool=WORDS[cat].filter(x=>!taken.includes(x));
+    const word=pick(pool);taken.push(word);
+    return {tid:t.id,name:t.name,cat,word,order:t.m};
+  });
+  await roomRef().update({status:'relay',round:(r.round||0)+1,plays,relayResult:null,used:[...used,...taken].slice(-80)});
+  S.hideCard=false;
+}
+async function revealRelay(){
+  const r=R();
+  const res=(r.plays||[]).map(p=>{const i=relayInfo(p);const lp=P(i.last);const ans=i.ansd?lp.ans:'';
+    return {tid:p.tid,name:p.name,cat:p.cat,word:p.word,order:p.order,ans,by:i.last||'',at:i.ansd?(lp.ansAt||0):0,correct:!!ans&&norm(ans)===norm(p.word),bonus:false}});
+  const ok=res.filter(x=>x.correct).sort((a,b)=>a.at-b.at);
+  if(ok.length&&res.length>1)ok[0].bonus=true;
+  const sc={...(r.teamScores||{})};
+  res.forEach(x=>{if(x.correct)sc[x.tid]=(sc[x.tid]||0)+2+(x.bonus?1:0)});
+  await roomRef().update({status:'relayresult',relayResult:res,teamScores:sc});
+}
+async function autoAssign(){
+  const ts=teamsOf(),ps=shuffle(S.players),now=Date.now(),k=ts.length;
+  const sizes={};ts.forEach((t,i)=>{sizes[t.id]=Math.min(TEAMMAX,Math.floor(ps.length/k)+(i<ps.length%k?1:0))});
+  await roomRef().update({teamSizes:Object.fromEntries(ts.map(t=>[t.id,Math.max(1,sizes[t.id])]))});
+  const seats=[];for(let n=1;n<=TEAMMAX;n++)for(const t of ts)if(n<=sizes[t.id])seats.push([t.id,n]);
+  for(let i=0;i<ps.length;i++){const st=seats[i];await pRef(ps[i].id).update(st?{team:st[0],slot:st[1],teamAt:now+i}:{team:'',slot:0})}
+}
+
+function act(a,d,el){
+  const val=id=>{const e=document.getElementById(id);return e?e.value.trim():''};
+  const clr=id=>{const e=document.getElementById(id);if(e)e.value=''};
+  const r=R();
+  switch(a){
+    case 'create':{const n=val('nick');if(!n)return toast('닉네임을 입력해주세요');lsSet('liar_name',n);return w(()=>createRoom(n))}
+    case 'join':{const n=val('nick');if(!n)return toast('닉네임을 입력해주세요');lsSet('liar_name',n);return w(()=>enterRoom(val('code'),n))}
+    case 'joinlist':{const n=val('nick');if(!n)return toast('닉네임을 먼저 입력해주세요');lsSet('liar_name',n);return w(()=>enterRoom(d.code,n))}
+    case 'rejoin':return w(()=>enterRoom(S.code,lsGet('liar_name')));
+    case 'leave':return w(leaveRoom);
+    case 'copy':{const link=location.origin+'/?room='+S.code;const msg='🙆 몸으로 말해요 같이 해요!\n방 코드: '+S.code+'\n'+link;navigator.clipboard&&navigator.clipboard.writeText(msg).then(()=>toast('초대 메시지를 복사했어요. 카톡에 붙여넣으세요!'),()=>toast('초대 링크: '+link));return}
+    case 'togglecard':S.hideCard=!S.hideCard;return render();
+    case 'cat':return isHost()&&w(()=>roomRef().update({catChoice:d.v}));
+    case 'kick':return w(()=>pRef(d.id).delete());
+    case 'claimhost':return w(()=>roomRef().update({hostId:S.me,hostName:nm(S.me)}));
+    case 'tolobby':return w(()=>roomRef().update({status:'lobby'}));
+    case 'game':return isHost()&&w(()=>roomRef().update({game:d.v}));
+    case 'tcount':return isHost()&&w(()=>roomRef().update({teamCount:Math.min(5,Math.max(2,(r.teamCount||2)+Number(d.d)))}));
+    case 'tname':{const v=String(d.v||'').trim().slice(0,12);if(!v)return render();return w(()=>roomRef().update({teamNames:{[d.tid]:v}}))}
+    case 'tsize':return isHost()&&w(()=>roomRef().update({teamSizes:{[d.tid]:Math.min(TEAMMAX,Math.max(1,sizeOf(d.tid)+Number(d.d)))}}));
+    case 'tjoin':{const n=Number(d.slot);if(S.players.some(p=>p.id!==S.me&&p.team===d.tid&&p.slot===n))return toast('이미 누가 앉은 자리예요');return w(()=>pRef(S.me).update({team:d.tid,slot:n,teamAt:Date.now()}))}
+    case 'tleave':return w(()=>pRef(S.me).update({team:'',slot:0}));
+    case 'tauto':return isHost()&&w(autoAssign);
+    case 'relaystart':return w(startRelay);
+    case 'pass':return w(()=>pRef(S.me).update({passRound:r.round}));
+    case 'tskip':return w(()=>pRef(d.id).update({passRound:r.round}));
+    case 'answer':{const t=val('ansIn');if(!t)return toast('정답을 입력해주세요');clr('ansIn');return w(()=>pRef(S.me).update({ansRound:r.round,ans:t.slice(0,30),ansAt:Date.now()}))}
+    case 'reveal':return w(revealRelay);
+    case 'taccept':{const res=(r.relayResult||[]).map(x=>({...x}));const x=res[Number(d.i)];if(!x||x.correct)return;x.correct=true;const sc={...(r.teamScores||{})};sc[x.tid]=(sc[x.tid]||0)+2;return w(()=>roomRef().update({relayResult:res,teamScores:sc}))}
+    /* local */
+    case 'local':S.view='local';S.local={step:'setup',cat:'랜덤',used:[]};return render();
+    case 'lhome':S.view='home';S.local=null;return render();
+    case 'lcat':S.local.cat=d.v;return render();
+    case 'lstart':{const L=S.local;const cat=WORDS[L.cat]?L.cat:pick(CATS);let pool=WORDS[cat].filter(x=>!L.used.includes(x));if(!pool.length)pool=WORDS[cat];const word=pick(pool);L.used.push(word);Object.assign(L,{step:'pass',curCat:cat,word});return render()}
+    case 'lshow':S.local.step='show';return render();
+    case 'lhide':S.local.step='play';return render();
+    case 'lreveal':S.local.step='reveal';return render();
+  }
+}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b||b.disabled)return;act(b.dataset.act,b.dataset,b)});
+document.addEventListener('change',e=>{const t=e.target;if(t.dataset&&t.dataset.change)act(t.dataset.change,{...t.dataset,v:t.value},t)});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.isComposing&&e.target.dataset&&e.target.dataset.enter){e.preventDefault();act(e.target.dataset.enter,{},e.target)}});
+
+/* ---------- render ---------- */
+function render(){
+  const a=document.activeElement;let keep=null;
+  if(a&&a.id&&a.tagName==='INPUT')keep={id:a.id,s:a.selectionStart,e:a.selectionEnd};
+  const vals={};$app.querySelectorAll('input[id]').forEach(i=>{if(i.value!==(i.getAttribute('data-init')||''))vals[i.id]=i.value});
+  $app.innerHTML=view();
+  for(const id in vals){const i=document.getElementById(id);if(i)i.value=vals[id]}
+  if(keep){const i=document.getElementById(keep.id);if(i){i.focus();try{i.setSelectionRange(keep.s,keep.e)}catch(e){}}}
+}
+function view(){
+  if(S.view==='local')return localView();
+  if(S.view==='room')return S.room?roomView():`<p class="wait">방에 들어가는 중…</p>`;
+  return homeView();
+}
+const catSelect=(key,v)=>`<select data-change="${key}">${['랜덤',...CATS].map(c=>`<option ${c===v?'selected':''}>${c}</option>`).join('')}</select>`;
+const noWriteBox=()=>S.noWrite?`<div class="notice">✋ 이 페이지에 <b>참여 권한</b>이 없어요. 앱 주인에게 이 페이지 공유에서 나를 <b>편집 가능</b>(또는 참여 가능)으로 초대해 달라고 하세요. 그 전엔 '한 폰으로 하기'를 이용하세요.</div>`:'';
+
+function homeView(){
+  let online='';
+  if(S.dbState==='loading')online=`<p class="desc">온라인 연결 중…</p>`;
+  else if(S.dbState==='none')online=`<div class="notice">서버에 연결하지 못했어요. 무료 서버가 잠에서 깨는 데 1분쯤 걸릴 수 있어요. 잠시 후 새로고침해 주세요.</div>`;
+  else online=`${noWriteBox()}
+    <button class="primary" data-act="create">🏠 방 만들기</button>
+    <div class="or">또는 방 코드로 입장</div>
+    <div class="row"><input id="code" maxlength="4" placeholder="ABCD" value="${URLROOM}" data-init="${URLROOM}" autocapitalize="characters" data-enter="join" style="text-transform:uppercase;letter-spacing:3px"><button class="ghost" data-act="join">입장</button></div>
+    ${S.rooms.length?`<label>열려 있는 방</label><ul class="rooms">${S.rooms.map(r=>`<li data-act="joinlist" data-code="${esc(r.code)}"><div><b>${esc(r.code)}</b> <small>👑 ${esc(r.hostName||'')}</small></div><div><span class="tag ${r.status==='lobby'?'':'busy'}">${r.status==='lobby'?'대기 중':'게임 중'}</span> <small style="color:var(--muted)">${ago(r.createdAt)}</small></div></li>`).join('')}</ul>`:''}`;
+  return `<header class="hero"><div class="logo">🙆</div><h1>몸으로 말해요</h1><p>1번만 제시어를 보고 몸짓으로 끝까지 전달! · 최대 5팀 · 팀당 1~10명</p></header>
+  <section class="card"><label>닉네임</label><input id="nick" maxlength="10" placeholder="예: 동현" value="${esc(lsGet('liar_name')||'')}" data-init="${esc(lsGet('liar_name')||'')}">${online}</section>
+  <section class="card"><h3>📱 한 폰으로 하기</h3><p class="desc" style="margin-top:0">모여 있을 때 폰 하나로 제시어만 뽑아요. 로그인 필요 없음.</p><button class="ghost" style="width:100%;margin-top:10px" data-act="local">시작하기</button></section>
+  <details class="rules"><summary>📖 게임 방법</summary>
+  1. 방장이 방을 만들고 친구들에게 <b>방 코드</b>를 알려줘요.<br>
+  2. 팀(최대 5팀)과 팀 인원(1~10명)을 정하고, 각자 원하는 <b>번호 자리</b>에 앉아요.<br>
+  3. 팀마다 서로 다른 제시어가 나가고, <b>1번만</b> 제시어를 봐요.<br>
+  4. 말·소리 없이 <b>몸짓으로만</b> 다음 번호에게 전달하고 '전달 완료'를 눌러요.<br>
+  5. <b>마지막 번호</b>가 정답을 입력해요.<br>
+  점수: 정답 +2 · 가장 빨리 맞힌 팀 +1</details>`;
+}
+
+function roomView(){
+  const r=R();
+  let top=`<div class="topbar"><button class="ghost small" data-act="leave">← 나가기</button><div class="codebox" data-act="copy">초대 복사 📋<b>${esc(S.code)}</b></div><span class="roundtag">${r.round?r.round+'판':''}</span></div>${noWriteBox()}`;
+  if(S.playersLoaded&&!P(S.me))return top+`<div class="card"><p>방 참가자 목록에서 빠졌어요.</p><button class="primary" data-act="rejoin">다시 참가하기</button></div>`;
+  if(S.playersLoaded&&!P(r.hostId))top+=`<div class="notice">방장이 나갔어요. <button class="ghost small" data-act="claimhost">👑 내가 방장 하기</button></div>`;
+  let body='';
+  if(r.status==='relay')body=relayView();
+  else if(r.status==='relayresult')body=relayResultView();
+  else body=teamLobby();
+  return top+body;
+}
+function teamLobby(){
+  const r=R(),h=isHost(),ts=teamsOf();
+  const seated=new Set(ts.flatMap(t=>membersOf(t.id).map(p=>p.id)));
+  const un=S.players.filter(p=>!seated.has(p.id));
+  const cards=ts.map(t=>{const sz=sizeOf(t.id),m=membersOf(t.id),mine=m.some(p=>p.id===S.me),canName=h||mine;
+    const slots=Array.from({length:sz},(_,k)=>{const n=k+1,occ=m.filter(p=>p.slot===n),role=slotRole(n,sz);
+      if(occ.length)return `<div class="slot taken ${occ.some(p=>p.id===S.me)?'me':''} ${occ.length>1?'dup':''}"><span class="num">${n}</span><span class="who">${occ.map(p=>esc(p.name)+(p.id===r.hostId?' 👑':'')).join(', ')}${occ.length>1?' ⚠️':''}</span><span class="role">${role}</span>${h&&!occ.some(p=>p.id===S.me)?`<button class="x" data-act="kick" data-id="${esc(occ[0].id)}" title="내보내기">✕</button>`:''}</div>`;
+      return `<button class="slot open" data-act="tjoin" data-tid="${t.id}" data-slot="${n}"><span class="num">${n}</span><span class="who">+ 여기 앉기</span><span class="role">${role}</span></button>`}).join('');
+    return `<div class="card team"><div class="row" style="margin:0 0 10px;align-items:center">${canName?`<input id="tn_${t.id}" class="tname" maxlength="12" value="${esc(t.name)}" data-init="${esc(t.name)}" data-change="tname" data-tid="${t.id}">`:`<h3 style="flex:1;margin:0">${esc(t.name)}</h3>`}<span class="cnt">${m.length}/${sz}명</span></div>
+    ${h?`<div class="stepper mini"><button data-act="tsize" data-tid="${t.id}" data-d="-1" ${sz<=1?'disabled':''}>−</button><b>팀 인원 ${sz}명</b><button data-act="tsize" data-tid="${t.id}" data-d="1" ${sz>=TEAMMAX?'disabled':''}>+</button></div>`:''}
+    <div class="slots">${slots}</div>${mine?`<button class="ghost small" data-act="tleave" style="margin-top:8px">내 자리 비우기</button>`:''}</div>`}).join('');
+  const chk=relayCheck();
+  return `${h?`<div class="card"><h3>⚙️ 설정</h3>
+    <label>팀 수</label><div class="stepper"><button data-act="tcount" data-d="-1">−</button><b>${ts.length}팀</b><button data-act="tcount" data-d="1">+</button></div>
+    <label>카테고리</label>${catSelect('cat',r.catChoice||'랜덤')}<p class="desc">랜덤이면 팀마다 카테고리도 따로 뽑혀요. 제시어는 항상 팀마다 달라요.</p>
+    <button class="ghost" style="width:100%;margin-top:12px" data-act="tauto">🎲 전원 랜덤 배정 (팀 인원 자동 맞춤)</button></div>`:''}
+  ${un.length?`<div class="card"><h3>🙋 자리 미선택 ${un.length}명</h3><ul class="plist">${un.map(p=>`<li class="${p.id===S.me?'me':''}">${esc(p.name)}</li>`).join('')}</ul>${un.some(p=>p.id===S.me)?'<p class="desc">아래 팀에서 원하는 번호 자리를 눌러 앉으세요. 자리가 없으면 관전해요.</p>':''}</div>`:''}
+  <p class="wait" style="margin:6px 0">1번만 제시어를 보고 → 번호 순서대로 전달 → 마지막 번호가 정답을 써요</p>
+  ${cards}
+  ${h?`<button class="primary" data-act="relaystart" ${chk.err?'disabled':''}>${chk.err?esc(chk.err):'🎮 게임 시작!'}</button>`:`<p class="wait">방장이 시작하기를 기다리는 중…</p>`}
+  ${teamBoard()}`;
+}
+function teamBoard(){
+  const r=R(),sc=r.teamScores||{};if(!Object.keys(sc).length)return '';
+  const ts=teamsOf().sort((a,b)=>(sc[b.id]||0)-(sc[a.id]||0));
+  return `<div class="card"><h3>🏆 팀 점수</h3><ul class="score">${ts.map((t,i)=>`<li><span>${i===0&&sc[t.id]?'🥇 ':''}${esc(t.name)}</span><span>${sc[t.id]||0}점</span></li>`).join('')}</ul></div>`;
+}
+function relayView(){
+  const r=R(),plays=r.plays||[],mine=plays.find(p=>(p.order||[]).includes(S.me));
+  let top='';
+  if(!mine)top=`<div class="card"><p class="desc" style="margin:0;text-align:center">👀 관전 중이에요. 다음 판에 팀에 들어가면 참여해요.</p></div>`;
+  else{
+    const i=relayInfo(mine),pos=i.ord.indexOf(S.me),first=pos===0,last=i.last===S.me,my=i.cur===S.me;
+    const tag=`${esc(mine.name)} · ${pos+1}번 / ${i.ord.length}명`;
+    if(first)top+=`<div class="card rolecard ${S.hideCard?'hidden':''}" data-act="togglecard">${S.hideCard?'<div class="peek">👆 눌러서 제시어 보기</div>':`<div class="cat">${tag}</div><div class="cat">카테고리: ${esc(mine.cat)}</div><div class="word">${esc(mine.word)}</div><p class="tip">${last?'🤐 혼자 팀이라 바로 정답을 쓰면 돼요':'🤐 우리 팀에서 나만 보는 제시어! 다음 번호에게 몸짓으로만 전달하세요 (말·소리 금지!)'}</p><div class="hidehint">눌러서 가리기</div>`}</div>`;
+    else top+=`<div class="card rolecard hidden"><div class="peek">🙈 제시어는 비밀!</div><div class="cat" style="color:#cbbef0">${tag}</div><p class="tip" style="color:#cbbef0">${last?'앞사람의 몸짓을 보고 정답을 맞혀요':'앞사람의 몸짓을 보고 그대로 다음 사람에게 몸으로 전달해요'}</p></div>`;
+    if(last){
+      const lp=P(S.me);const sent=lp&&lp.ansRound===r.round&&lp.ans;
+      if(my)top+=`<div class="card ${sent?'':'myturn'}"><h3>🎯 정답을 입력하세요!</h3>${sent?`<p class="desc" style="margin:0">제출한 답: <b>${esc(lp.ans)}</b> · 결과 공개 전까지 바꿀 수 있어요</p>`:'<p class="desc" style="margin:0">카테고리: '+esc(mine.cat)+'</p>'}<div class="row"><input id="ansIn" maxlength="30" placeholder="제시어는?" data-enter="answer"><button class="ghost" data-act="answer" style="background:var(--pri);color:#fff">${sent?'수정':'제출'}</button></div></div>`;
+      else top+=`<p class="wait">⏳ 앞사람들이 전달하는 중… (${i.passed}/${i.ord.length-1}) 내 차례가 오면 정답을 입력해요</p>`;
+    }else if(my)top+=`<div class="card myturn"><h3>${first?'👁 제시어를 확인했으면':'🗣 내 차례!'}</h3><p class="desc" style="margin:0">다음 사람 <b>${esc(nm(i.ord[pos+1]))}</b> 님에게 몸으로 전달하고 눌러주세요</p><button class="primary" data-act="pass">✅ 전달 완료</button></div>`;
+    else if(P(S.me).passRound===r.round)top+=`<p class="wait">👍 전달 완료! 우리 팀 결과를 기다려요</p>`;
+    else top+=`<p class="wait">⏳ ${esc(nm(i.cur))} 님 차례 · 내 앞에 ${pos-i.ord.indexOf(i.cur)}명</p>`;
+  }
+  const done=plays.filter(p=>relayInfo(p).ansd).length;
+  const board=`<div class="card"><h3>📊 팀 현황</h3>${plays.map(p=>{const i=relayInfo(p),steps=Math.max(1,i.ord.length-1);
+    return `<div class="tstat"><div class="tsh"><b>${esc(p.name)}</b><small>${i.ansd?'✅ 정답 제출':i.ord.length<2?'혼자 도전 중':'전달 '+i.passed+'/'+steps}</small></div><div class="bar"><i style="width:${i.ansd?100:Math.round(i.passed/steps*90)}%"></i></div><div class="chain">${i.ord.map(id=>`<span class="${id===i.cur&&!i.ansd?'cur':''}">${esc(nm(id))}</span>`).join(' → ')}</div>${isHost()&&i.cur&&i.cur!==i.last&&!i.ansd?`<button class="ghost small" data-act="tskip" data-id="${esc(i.cur)}" style="margin-top:6px">⏭ ${esc(nm(i.cur))} 넘기기</button>`:''}</div>`}).join('')}</div>`;
+  const host=isHost()?`<button class="primary" data-act="reveal">📢 결과 공개 (${done}/${plays.length}팀 제출)</button><div style="text-align:center;margin-top:10px"><button class="ghost small" data-act="tolobby">⏹ 이번 판 그만하고 대기실로</button></div>`:'';
+  return top+board+host;
+}
+function relayResultView(){
+  const r=R(),res=r.relayResult||[],h=isHost(),win=res.find(x=>x.bonus)||(res.length===1&&res[0].correct?res[0]:null);
+  const banner=win?`<div class="banner citizen">🏆 ${esc(win.name)} 승리!<small>${res.length>1?'가장 빨리 정답을 맞혔어요':'정답을 맞혔어요'}</small></div>`:res.some(x=>x.correct)?'':`<div class="banner liar">💥 전원 실패!<small>전달하다가 다 바뀌었어요 ㅋㅋ</small></div>`;
+  const cards=res.map((x,i)=>`<div class="card tres ${x.correct?'ok':'no'}"><h3>${esc(x.name)} ${x.correct?'⭕ 정답!':'❌ 땡!'}${x.bonus?' ⚡1등':''}</h3><div class="reveal"><span>제시어</span><b>${esc(x.word)}</b><span>마지막 답</span><b>${esc(x.ans||'(답 없음)')}</b></div><div class="chain" style="margin-top:8px">${(x.order||[]).map(id=>esc(nm(id))).join(' → ')}</div>${h&&!x.correct&&x.ans?`<button class="ghost small" data-act="taccept" data-i="${i}" style="margin-top:8px">✅ 정답 인정</button>`:''}</div>`).join('');
+  return banner+cards+(h?`<button class="primary" data-act="relaystart" ${relayCheck().err?'disabled':''}>${relayCheck().err?'▶ 다음 판 불가: '+esc(relayCheck().err):'▶ 다음 판'}</button><button class="ghost" style="width:100%;margin-top:8px" data-act="tolobby">⚙️ 팀·설정 바꾸기</button>`:`<p class="wait">방장이 다음 판을 시작할 거예요</p>`)+teamBoard();
+}
+/* ---------- local (one phone) ---------- */
+function localView(){
+  const L=S.local;
+  const back=`<div class="topbar"><button class="ghost small" data-act="lhome">← 처음으로</button><span></span></div>`;
+  if(L.step==='setup')return back+`<header class="hero"><div class="logo">📱</div><h1 style="font-size:32px">한 폰으로 하기</h1></header>
+   <div class="card"><label>카테고리</label>${catSelect('lcat',L.cat)}<button class="primary" data-act="lstart">제시어 뽑기</button></div>`;
+  if(L.step==='pass')return back+`<div class="card pass"><div class="big">1번</div><p>제시어를 볼 1번만 화면을 보세요! 🙈</p><button class="primary" data-act="lshow">👀 제시어 보기</button></div>`;
+  if(L.step==='show')return back+`<div class="card rolecard"><div class="cat">카테고리: ${esc(L.curCat)}</div><div class="word">${esc(L.word)}</div><p class="tip">말·소리 없이 몸짓으로만 전달하세요!</p></div><button class="primary" data-act="lhide">🙈 가리기 · 전달 시작</button>`;
+  if(L.step==='play')return back+`<div class="card pass"><div class="big">🤸</div><h2>몸으로 전달 중…</h2><p>카테고리: <b>${esc(L.curCat)}</b></p><p class="desc">마지막 사람이 정답을 외치면 공개하세요</p><button class="primary" data-act="lreveal">📢 정답 공개</button></div>`;
+  return back+`<div class="banner citizen">정답은<small style="font-family:Jua;font-size:40px">${esc(L.word)}</small></div><button class="primary" data-act="lstart">🔁 다음 제시어</button>`;
+}
+</script>
+</body>
+</html>

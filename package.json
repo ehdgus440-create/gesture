@@ -1,0 +1,16 @@
+{
+  "name": "gesture",
+  "version": "1.0.0",
+  "description": "몸으로 말해요 - 로그인 없이 링크로 같이 하는 팀전 몸짓 전달 게임 (최대 5팀, 팀당 1~10명)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test tests/*.test.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "ws": "^8.18.0"
+  }
+}
